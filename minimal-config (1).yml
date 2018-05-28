@@ -1,0 +1,21 @@
+#cloud-config
+
+write_files:
+   - path: /etc/systemd/system/etcd-member.service.d/10-environment-variables.env
+     permissions: "0644"
+     
+passwd:
+  users: 
+    - name: anand
+      password_hash: $1$DF2V.llN$6YMarev0CDiq2myyMWo161
+      ssh_authorized_keys:
+        - ssh-rsa <REPLACE________WITH______ACTUAL_____PVT____KEY>
+      groups: 
+       - sudo
+       - docker
+hostname: 
+systemd:
+    units:
+      - name: etcd.service
+        mask: true
+
