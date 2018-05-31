@@ -1,0 +1,24 @@
+PART-I. Set CoreOS Baremetal 
+=========================
+
+Additional Documentation : https://coreos.com/os/docs/latest/booting-on-virtualbox.html
+https://coreos.com/os/docs/latest/cloud-config.html
+https://www.digitalocean.com/community/tutorials/how-to-use-cloud-config-for-your-initial-server-setup
+https://coreos.com/os/docs/latest/quickstart.html
+
+1. Visit https://coreos.com/docs/running-coreos/platforms/iso/
+
+2. Copy link address of "Booting CoreOS from an ISO" . 
+
+3. Download the ISO file to a folder 
+
+4. Start a new VM on Virtualbox with Linux 2.x/3.x OS type 
+ 
+5. Set all necessary configuration and then start the VM 
+
+6. Input the path to the ISO file and now at the prompt start a new file using 'vi' called 'cloud-config-file' in yaml format
+
+ Youtube : https://www.youtube.com/watch?v=yiWa0KFJDfI
+
+ 
+PART-II. 

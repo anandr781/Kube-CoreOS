@@ -1,0 +1,11 @@
+REFERENCE URL : http://www.woodensquares.net/posts/xen-3.html
+
+First download using wget or curl :
+https://github.com/coreos/container-linux-config-transpiler/releases/download/v0.8.0/ct-v0.8.0-x86_64-unknown-linux-gnu
+
+
+root@andromeda:/storage/xen/bin# wget https://github.com/coreos/container-linux-config-transpiler/releases/download/v0.5.0/ct-v0.5.0-x86_64-unknown-linux-gnu
+root@andromeda:/storage/xen/bin# mv ct-v0.5.0-x86_64-unknown-linux-gnu ct
+root@andromeda:/storage/xen/bin# chmod a+x ct
+root@andromeda:/storage/xen/guests/etcd# ./ct -version
+ct v0.5.0

@@ -1,0 +1,45 @@
+Overview of Systemctl : 
+     https://coreos.com/os/docs/latest/overview-of-systemctl.html
+
+      https://coreos.com/os/docs/latest/overview-of-systemctl.html
+
+Getting Started With Docker : 
+      https://coreos.com/os/docs/latest/getting-started-with-docker.html
+
+CoreOS-FAQ: 
+      https://coreos.com/etcd/docs/latest/faq.html
+
+Cloud Config examples:
+      https://coreos.com/os/docs/latest/cloud-config-examples.html
+
+CoreOS - Cluster member migration:
+      https://coreos.com/etcd/docs/latest/v2/admin_guide.html#member-migration
+	  
+CoreOS-AWS Cloud Formation Template :
+      https://gist.github.com/kgorskowski/3793ea745a1dd370e17e#file-coreos-ecs-agent-cloudformation-template
+
+Important Files and Directories :
+ systemd unit file location : /usr/lib64/systemd/systemctl
+
+Network unit files: /usr/lib64/systemd/network
+
+User-written unit files and drop-ins to change the default parameters : /etc/systemd/system
+
+User-written network unit files : /etc/systemd/network 
+
+Runtime environment variables and drop-in configuration of individual components : /run/systemd/system
+
+============
+Kubernetes - (Kube-API server issue fix): 
+https://github.com/kubernetes/kubernetes/issues/39586
+	  
+===========
+
+Leader - Single node: 
+https://tinyurl.com/y9dfqx4x
+
+Follower-Single node:
+https://tinyurl.com/y6vws8xq
+
+Minimal : 
+https://tinyurl.com/yan74bnl
