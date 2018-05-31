@@ -1,21 +1,41 @@
 #cloud-config
 
 write_files:
-   - path: /etc/systemd/system/etcd-member.service.d/10-environment-variables.env
+   - path: /etc/systemd/system/etcd-member.service.d/etcd-member-environment.env
      permissions: "0644"
      
 passwd:
   users: 
     - name: anand
-      password_hash: $1$DF2V.llN$6YMarev0CDiq2myyMWo161
+      password_hash: ${PWD}
       ssh_authorized_keys:
-        - ssh-rsa <REPLACE________WITH______ACTUAL_____PVT____KEY>
+        - ssh-rsa ${PVT_SSH_KEY}
       groups: 
        - sudo
        - docker
-hostname: 
+hostname: ${HOST_NAME}
 systemd:
     units:
       - name: etcd.service
         mask: true
+      - name: etcd-member.service
+        drop-ins: 
+          - name: 20-clct-etcd-member.conf
+            content: |
+              [Service]
+              EnvironmentFile=/etc/systemd/system/etcd-member-environment.env
+              
+              
+          
+      - name: flanneld.service
+        drop-ins:
+          - name: 50-network-config.conf
+            content: |
+              [Unit]
+              Requires=etcd-member.service
+              After=etcd-member.service
+              
+              [Service]
+              ExecStartPre=/usr/bin/etcdctl set /coreos.com/network/config '{ "Network": "192.168.0.0/16" , "Backend": {"Type": "vxlan"} }'
+     
 
