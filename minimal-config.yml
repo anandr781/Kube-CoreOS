@@ -1,0 +1,90 @@
+#cloud-config
+
+storage:
+  files:
+    - filesystem: "root"
+      path: /opt/bootstrap-coreos.sh
+      mode: 0755
+      contents:
+        remote:
+          url: "https://raw.githubusercontent.com/anandr781/Kube-CoreOS/master/bootstrap-coreos.sh"
+
+passwd:
+  users: 
+    - name: anand
+      password_hash: $1$DF2V.llN$6YMarev0CDiq2myyMWo161
+      ssh_authorized_keys:
+         - ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAjYQpHOuiWOYjWiF5HJejHMB0gDjCSZSHqTnfw6nrrjeYNPj2JmnpxTFOUa34gdNJ8pHMSMwWIOTd0ofFfo7t0VKO3UTSwxjjSWB/VeuQojqGNJKv+zw0nx26m3pvOWWHc66PiEWsPvGr7Q4NZt/rZNPYdcAG/ra0/FVCnjDTPEplLzZFm5GfiXLuSa/HRcDlfShdlrL1RV7MGPMCMb/ggjrs3JwkjuCd2aTrdjUl1DT78t0LWXnkJDmht9jSA/iAIhP8CAsI/Q+uHyqdnejc2VOdAVLGnyANRUATQtzUBkxpzZIe2K489eiCvFw1ELsR5PLg4gYhhaj0faCd9me35w== rsa-key-20180409
+      groups: 
+       - sudo
+       - docker
+
+systemd:
+    units:
+      - name: etcd.service
+        mask: true
+      - name: kube-coreos-cluster-init.service
+        drop-ins: 
+          - name: 10-cluster-member.conf
+            content: |
+              [Service]
+              Type=oneshot
+              ExecStart= 
+              ExecStart=/opt/bootstrap-coreos.sh
+              
+              [Install]
+              WantedBy=multi-user.target
+            
+      - name: etcd-member.service
+        enable: true
+        drop-ins: 
+          - name: 20-clct-etcd-member.conf
+            content: |
+              [Unit]
+              Requires=kube-coreos-cluster-init.service
+              After=kube-coreos-cluster-init.service
+              
+              [Service]
+              EnvironmentFile=/etc/systemd/system/etcd-member.service.d/etcd-member-environment.env
+              Environment="ETCD_IMAGE_TAG=v3.2.15"
+              
+              
+          
+      - name: flanneld.service
+        enable: true
+        drop-ins:
+          - name: 50-network-config.conf
+            content: |
+              [Unit]
+              Requires=etcd-member.service
+              After=etcd-member.service
+              
+              [Service]
+              EnvironmentFile=/etc/systemd/system/flanneld.service.d/flanneld-environment.env
+              ExecStartPre=/usr/bin/etcdctl set /coreos.com/network/config '{ "Network": ${FLANNEL_IP_RANGE} , "Backend": {"Type": "vxlan"} }'
+      
+      - name: docker.service
+        enable: true
+        drop-ins:
+          - name: 60-docker-dependencies.conf
+            content: |
+              [Unit]
+              After=flanneld.service
+              Requires=flanneld.service
+ 
+              [Service]
+              Restart=always
+      
+      - name: docker-tcp.socket
+        enable: true
+        contents: |
+          [Unit]
+          Description=Docker Socket for the API
+
+          [Socket] 
+          ListenStream=2375
+          BindIPv6Only=both
+          Service=docker.service
+
+          [Install]
+          WantedBy=sockets.target
