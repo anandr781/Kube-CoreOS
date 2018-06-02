@@ -10,7 +10,7 @@ ETCD_INITIAL_CLUSTER="$ETCD_NAME=http://10.0.1.8:2380,$ETCD_NAME-2=http://10.0.1
 
 BOOTSTRAP_SCRIPT_PATH = "/opt/bootstrap-coreos.sh"
 FLANNEL_IP_NETWORK_RANGE = "10.10.0.0/16"
-BOOTSTRAP_URL="https://github.com/anandr781/Kube-CoreOS/master/bootstrap-coreos.sh" 
+BOOTSTRAP_URL="https://raw.githubusercontent.com/anandr781/Kube-CoreOS/master/bootstrap-coreos.sh" 
 
 
 #################  MY FUNCTIONS  #########################################
