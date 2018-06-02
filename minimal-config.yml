@@ -29,8 +29,9 @@ systemd:
             content: |
               [Service]
               Type=oneshot
+              EnvironmentFile=/etc/systemd/system/kube-coreos-cluster-init.service.d/kube-coreos-cluster-init-env.env
               ExecStart= 
-              ExecStart=/opt/bootstrap-coreos.sh
+              ExecStart=${BOOTSTRAP_SCRIPT}
               
               [Install]
               WantedBy=multi-user.target
@@ -45,10 +46,9 @@ systemd:
               After=kube-coreos-cluster-init.service
               
               [Service]
-              EnvironmentFile=/etc/systemd/system/etcd-member.service.d/etcd-member-environment.env
+              EnvironmentFile=/etc/systemd/system/etcd-member.service.d/etcd-member-env.env
               Environment="ETCD_IMAGE_TAG=v3.2.15"
-              
-              
+                           
           
       - name: flanneld.service
         enable: true
@@ -60,7 +60,7 @@ systemd:
               After=etcd-member.service
               
               [Service]
-              EnvironmentFile=/etc/systemd/system/flanneld.service.d/flanneld-environment.env
+              EnvironmentFile=/etc/systemd/system/flanneld.service.d/flanneld-env.env
               ExecStartPre=/usr/bin/etcdctl set /coreos.com/network/config '{ "Network": ${FLANNEL_IP_RANGE} , "Backend": {"Type": "vxlan"} }'
       
       - name: docker.service
