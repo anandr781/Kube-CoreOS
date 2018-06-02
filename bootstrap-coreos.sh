@@ -3,7 +3,8 @@
 #################  MY VARIABLES (Don't proceed without changing this )#########################################
 ETCD_NAME="etcd-kube-coreos" 
 ETCD_CLUSTER_TOKEN="kube-cluster"
-ETCD_INITIAL_CLUSTER="$ETCD_NAME=http://10.0.1.8:2380,$ETCD_NAME-2=http://10.0.1.9:2380,$ETCD_NAME-3=http://10.0.1.10:2380"
+HOST_IP=$1
+ETCD_INITIAL_CLUSTER="$ETCD_NAME=http://$HOST_IP:2380,$ETCD_NAME-2=http://192.168.1.110:2380,$ETCD_NAME-3=http://192.168.1.111:2380"
 
 #################  MY CONSTANTS (Don't change this unless you know what you're doing) ###########################
 
@@ -36,9 +37,9 @@ construct_etcd-member_env () {
    CAT << EOF > etcd-member-env.env
 ETCD_OPTS = --name=$ETCD_NAME  \
   --listen-peer-urls="http://0.0.0.0:2380"  \
-  --listen-client-urls="http://10.0.1.8:2379,http://127.0.0.1:2379"  \
-  --advertise-client-urls="http://10.0.1.8:2379,http://127.0.0.1:2379"  \
-  --initial-advertise-peer-urls="http://10.0.1.8:2380"  \
+  --listen-client-urls="http://$HOST_IP:2379,http://127.0.0.1:2379"  \
+  --advertise-client-urls="http://$HOST_IP:2379,http://127.0.0.1:2379"  \
+  --initial-advertise-peer-urls="http://$HOST_IP:2380"  \
   --initial-cluster="$ETCD_INITIAL_CLUSTER" \ 
   --initial-cluster-state="new"  \
   --initial-cluster-token=$ETCD_CLUSTER_TOKEN
