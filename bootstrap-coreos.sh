@@ -15,15 +15,15 @@ BOOTSTRAP_URL="https://raw.githubusercontent.com/anandr781/Kube-CoreOS/master/bo
 
 
 #################  MY FUNCTIONS  #########################################
-construct_kube-coreos-cluster-init_env () {
-   
-   mkdir -p "/etc/systemd/system/kube-coreos-cluster-init.service.d"
-   cd "/etc/systemd/system/kube-coreos-cluster-init.service.d"
-   cat << EOF > kube-coreos-cluster-init-env.env
-BOOTSTRAP_SCRIPT=$BOOTSTRAP_SCRIPT_PATH
-EOF
+# construct_kube-coreos-cluster-init_env () {
+   # echo ''
+   # mkdir -p "/etc/systemd/system/kube-coreos-cluster-init.service.d"
+   # cd "/etc/systemd/system/kube-coreos-cluster-init.service.d"
+   # cat << EOF > kube-coreos-cluster-init-env.env
+# BOOTSTRAP_SCRIPT=$BOOTSTRAP_SCRIPT_PATH
+# EOF
   
-}
+# }
 construct_flannel_env () {
   mkdir -p "/etc/systemd/system/flanneld.service.d"
   cd "/etc/systemd/system/flanneld.service.d"
@@ -52,7 +52,7 @@ EOF
 begin_execution () {
 
   # construct flanneld env file
-  construct_kube-coreos-cluster-init_env
+  # construct_kube-coreos-cluster-init_env
   
   # construct flanneld env file
   construct_flannel_env

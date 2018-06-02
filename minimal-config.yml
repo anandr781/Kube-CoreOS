@@ -23,33 +23,15 @@ systemd:
     units:
       - name: etcd.service
         mask: true
-      - name: kube-coreos-cluster-init.service
-        dropins: 
-          - name: 10-cluster-member.conf
-            contents: |
-              [Service]
-              Type=oneshot
-              EnvironmentFile=/etc/systemd/system/kube-coreos-cluster-init.service.d/kube-coreos-cluster-init-env.env
-              ExecStart= 
-              ExecStart=${BOOTSTRAP_SCRIPT}
-              
-              [Install]
-              WantedBy=multi-user.target
-            
+           
       - name: etcd-member.service
         enable: true
         dropins: 
           - name: 20-clct-etcd-member.conf
             contents: |
-              [Unit]
-              Requires=kube-coreos-cluster-init.service
-              After=kube-coreos-cluster-init.service
-              
               [Service]
               EnvironmentFile=/etc/systemd/system/etcd-member.service.d/etcd-member-env.env
-              Environment="ETCD_IMAGE_TAG=v3.2.15"
-                           
-          
+                       
       - name: flanneld.service
         enable: true
         dropins:
