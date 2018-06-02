@@ -9,19 +9,20 @@ ETCD_INITIAL_CLUSTER="$ETCD_NAME=http://$HOST_IP:2380,$ETCD_NAME-2=http://192.16
 #################  MY CONSTANTS (Don't change this unless you know what you're doing) ###########################
 
 
-BOOTSTRAP_SCRIPT_PATH = "/opt/bootstrap-coreos.sh"
-FLANNEL_IP_NETWORK_RANGE = "10.10.0.0/16"
+BOOTSTRAP_SCRIPT_PATH="/opt/bootstrap-coreos.sh"
+FLANNEL_IP_NETWORK_RANGE="10.10.0.0/16"
 BOOTSTRAP_URL="https://raw.githubusercontent.com/anandr781/Kube-CoreOS/master/bootstrap-coreos.sh" 
 
 
 #################  MY FUNCTIONS  #########################################
 construct_kube-coreos-cluster-init_env () {
-   if [ -x "$BOOTSTRAP_SCRIPT_PATH" ];
+   
    mkdir -p "/etc/systemd/system/kube-coreos-cluster-init.service.d"
    cd "/etc/systemd/system/kube-coreos-cluster-init.service.d"
    cat << EOF > kube-coreos-cluster-init-env.env
 BOOTSTRAP_SCRIPT=$BOOTSTRAP_SCRIPT_PATH
 EOF
+  
 }
 construct_flannel_env () {
   mkdir -p "/etc/systemd/system/flanneld.service.d"
@@ -29,6 +30,7 @@ construct_flannel_env () {
   CAT << EOF > flanneld-env.env
 FLANNEL_IP_RANGE=$FLANNEL_IP_NETWORK_RANGE
 EOF
+
 }
 
 construct_etcd-member_env () {
