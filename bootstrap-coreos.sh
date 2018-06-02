@@ -42,7 +42,7 @@ ETCD_OPTS = --name=$ETCD_NAME  \
   --listen-client-urls="http://$HOST_IP:2379,http://127.0.0.1:2379"  \
   --advertise-client-urls="http://$HOST_IP:2379,http://127.0.0.1:2379"  \
   --initial-advertise-peer-urls="http://$HOST_IP:2380"  \
-  --initial-cluster="$ETCD_INITIAL_CLUSTER" \ 
+  --initial-cluster="$ETCD_INITIAL_CLUSTER"  \
   --initial-cluster-state="new"  \
   --initial-cluster-token=$ETCD_CLUSTER_TOKEN
 EOF
