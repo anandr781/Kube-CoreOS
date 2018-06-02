@@ -4,7 +4,9 @@
 ETCD_NAME="etcd-kube-coreos" 
 ETCD_CLUSTER_TOKEN="kube-cluster"
 HOST_IP=$1
-ETCD_INITIAL_CLUSTER="$ETCD_NAME=http://$HOST_IP:2380,$ETCD_NAME-2=http://192.168.1.110:2380,$ETCD_NAME-3=http://192.168.1.111:2380"
+HOST_IP2=$2
+HOST_IP3=$3
+ETCD_INITIAL_CLUSTER="$ETCD_NAME=http://$HOST_IP:2380,$ETCD_NAME-2=http://$HOST_IP2:2380,$ETCD_NAME-3=http://HOST_IP3:2380"
 
 #################  MY CONSTANTS (Don't change this unless you know what you're doing) ###########################
 
