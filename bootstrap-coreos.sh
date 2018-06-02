@@ -6,7 +6,7 @@ ETCD_CLUSTER_TOKEN="kube-cluster"
 HOST_IP=$1
 HOST_IP2=$2
 HOST_IP3=$3
-HOST_NAME=XXX
+HOST_NAME=$4
 ETCD_INITIAL_CLUSTER="$ETCD_NAME=http://$HOST_IP:2380,$ETCD_NAME-2=http://$HOST_IP2:2380,$ETCD_NAME-3=http://HOST_IP3:2380"
 
 #################  MY CONSTANTS (Don't change this unless you know what you're doing) ###########################
@@ -54,7 +54,10 @@ EOF
 }
 
 start_services () { 
+  echo "Setting hostname = "$HOST_NAME 
+  
   hostnamectl set-hostname $HOST_NAME
+  echo "Restarting Daemon and services one by one"
   systemctl daemon-reload 
   systemctl restart etcd-member.service
   systemctl restart flanneld.service
