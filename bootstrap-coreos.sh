@@ -6,6 +6,7 @@ ETCD_CLUSTER_TOKEN="kube-cluster"
 HOST_IP=$1
 HOST_IP2=$2
 HOST_IP3=$3
+HOST_NAME=XXX
 ETCD_INITIAL_CLUSTER="$ETCD_NAME=http://$HOST_IP:2380,$ETCD_NAME-2=http://$HOST_IP2:2380,$ETCD_NAME-3=http://HOST_IP3:2380"
 
 #################  MY CONSTANTS (Don't change this unless you know what you're doing) ###########################
@@ -27,6 +28,7 @@ BOOTSTRAP_URL="https://raw.githubusercontent.com/anandr781/Kube-CoreOS/master/bo
   
 # }
 construct_flannel_env () {
+  echo 'setting env file for flannel -' $FLANNEL_IP_NETWORK_RANGE
   mkdir -p "/etc/systemd/system/flanneld.service.d"
   cd "/etc/systemd/system/flanneld.service.d"
   cat << EOF > flanneld-env.env
@@ -36,6 +38,7 @@ EOF
 }
 
 construct_etcd-member_env () {
+   echo 'setting env file for etcd -' $ETCD_INITIAL_CLUSTER
    mkdir -p "/etc/systemd/system/etcd-member.service.d"
    cd "/etc/systemd/system/etcd-member.service.d"	
    cat << EOF > etcd-member-env.env
@@ -50,6 +53,14 @@ ETCD_OPTS = --name=$ETCD_NAME  \
 EOF
 }
 
+start_services () { 
+  hostnamectl set-hostname $HOST_NAME
+  systemctl daemon-reload 
+  systemctl restart etcd-member.service
+  systemctl restart flanneld.service
+  systemctl restart docker.service
+  systemctl restart docker-tcp.socket 
+}
 
 begin_execution () {
 
@@ -61,7 +72,16 @@ begin_execution () {
 
   # construct etcd-member env file 
   construct_etcd-member_env
-
+  
+  # start services
+  echo "Do you wish to start the services from minimal config?"
+  select yn in "Yes" "No"; do
+    case $yn in
+        Yes ) start_services ; break;;
+        No ) exit;;
+    esac
+  done
+     
 }
 
 download_bootstrap_script_and_retry () {
