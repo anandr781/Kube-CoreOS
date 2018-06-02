@@ -24,7 +24,7 @@ systemd:
       - name: etcd.service
         mask: true
       - name: kube-coreos-cluster-init.service
-        drop-ins: 
+        dropins: 
           - name: 10-cluster-member.conf
             content: |
               [Service]
@@ -38,7 +38,7 @@ systemd:
             
       - name: etcd-member.service
         enable: true
-        drop-ins: 
+        dropins: 
           - name: 20-clct-etcd-member.conf
             content: |
               [Unit]
@@ -52,7 +52,7 @@ systemd:
           
       - name: flanneld.service
         enable: true
-        drop-ins:
+        dropins:
           - name: 50-network-config.conf
             content: |
               [Unit]
@@ -65,7 +65,7 @@ systemd:
       
       - name: docker.service
         enable: true
-        drop-ins:
+        dropins:
           - name: 60-docker-dependencies.conf
             content: |
               [Unit]
