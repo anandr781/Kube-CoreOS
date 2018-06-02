@@ -24,9 +24,9 @@ systemd:
       - name: etcd.service
         mask: true
       - name: kube-coreos-cluster-init.service
-        drop-ins: 
+        dropins: 
           - name: 10-cluster-member.conf
-            content: |
+            contents: |
               [Service]
               Type=oneshot
               EnvironmentFile=/etc/systemd/system/kube-coreos-cluster-init.service.d/kube-coreos-cluster-init-env.env
@@ -38,9 +38,9 @@ systemd:
             
       - name: etcd-member.service
         enable: true
-        drop-ins: 
+        dropins: 
           - name: 20-clct-etcd-member.conf
-            content: |
+            contents: |
               [Unit]
               Requires=kube-coreos-cluster-init.service
               After=kube-coreos-cluster-init.service
@@ -52,9 +52,9 @@ systemd:
           
       - name: flanneld.service
         enable: true
-        drop-ins:
+        dropins:
           - name: 50-network-config.conf
-            content: |
+            contents: |
               [Unit]
               Requires=etcd-member.service
               After=etcd-member.service
@@ -65,9 +65,9 @@ systemd:
       
       - name: docker.service
         enable: true
-        drop-ins:
+        dropins:
           - name: 60-docker-dependencies.conf
-            content: |
+            contents: |
               [Unit]
               After=flanneld.service
               Requires=flanneld.service
