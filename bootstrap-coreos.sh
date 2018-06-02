@@ -27,7 +27,7 @@ EOF
 construct_flannel_env () {
   mkdir -p "/etc/systemd/system/flanneld.service.d"
   cd "/etc/systemd/system/flanneld.service.d"
-  CAT << EOF > flanneld-env.env
+  cat << EOF > flanneld-env.env
 FLANNEL_IP_RANGE=$FLANNEL_IP_NETWORK_RANGE
 EOF
 
@@ -36,7 +36,7 @@ EOF
 construct_etcd-member_env () {
    mkdir -p "/etc/systemd/system/etcd-member.service.d"
    cd "/etc/systemd/system/etcd-member.service.d"	
-   CAT << EOF > etcd-member-env.env
+   cat << EOF > etcd-member-env.env
 ETCD_OPTS = --name=$ETCD_NAME  \
   --listen-peer-urls="http://0.0.0.0:2380"  \
   --listen-client-urls="http://$HOST_IP:2379,http://127.0.0.1:2379"  \
