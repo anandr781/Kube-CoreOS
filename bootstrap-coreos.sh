@@ -15,7 +15,6 @@ ETCD_INITIAL_CLUSTER="$HOST_ETCD_NAME=http://$HOST_IP:2380,$HOST2_ETCD_NAME=http
 
 
 BOOTSTRAP_SCRIPT_PATH="/opt/bootstrap-coreos.sh"
-FLANNEL_IP_NETWORK_RANGE="10.10.0.0/16"
 BOOTSTRAP_URL="https://raw.githubusercontent.com/anandr781/Kube-CoreOS/master/bootstrap-coreos.sh" 
 
 
@@ -29,15 +28,15 @@ BOOTSTRAP_URL="https://raw.githubusercontent.com/anandr781/Kube-CoreOS/master/bo
 # EOF
   
 # }
-construct_flannel_env () {
-  echo 'setting env file for flannel -' $FLANNEL_IP_NETWORK_RANGE
-  mkdir -p "/etc/systemd/system/flanneld.service.d"
-  cd "/etc/systemd/system/flanneld.service.d"
-  cat << EOF > flanneld-env.env
-FLANNEL_IP_RANGE=$FLANNEL_IP_NETWORK_RANGE
-EOF
+# construct_flannel_env () {
+  # echo 'setting env file for flannel -' $FLANNEL_IP_NETWORK_RANGE
+  # mkdir -p "/etc/systemd/system/flanneld.service.d"
+  # cd "/etc/systemd/system/flanneld.service.d"
+  # cat << EOF > flanneld-env.env
+# FLANNEL_IP_RANGE=$FLANNEL_IP_NETWORK_RANGE
+# EOF
 
-}
+# }
 
 construct_etcd-member_env () {
    echo 'setting env file for etcd -' $ETCD_INITIAL_CLUSTER
@@ -72,7 +71,7 @@ begin_execution () {
   # construct_kube-coreos-cluster-init_env
   
   # construct flanneld env file
-  construct_flannel_env
+  # construct_flannel_env
 
   # construct etcd-member env file 
   construct_etcd-member_env
@@ -87,13 +86,7 @@ begin_execution () {
   done
      
 }
-validate_input_parameters () {
-  if [ -z "$1" ]
-  then
-    echo "No argument supplied -$1"
-  fi
- 
-}
+
 download_bootstrap_script_and_retry () {
  
    curl -O $BOOTSTRAP_SCRIPT_PATH -L $BOOTSTRAP_URL
@@ -105,7 +98,7 @@ download_bootstrap_script_and_retry () {
 ##########################################################
 
 # check if exists with executable permission -x switch
-validate_input_parameters
+
 if [ -x "$BOOTSTRAP_SCRIPT_PATH" ];  then
    echo 'About to start execution since found '$BOOTSTRAP_SCRIPT_PATH
    begin_execution
