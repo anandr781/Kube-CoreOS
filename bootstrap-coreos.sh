@@ -1,13 +1,15 @@
 #!/bin/bash
 
 #################  MY VARIABLES (Don't proceed without changing this )#########################################
-ETCD_NAME="etcd-kube-coreos" 
 ETCD_CLUSTER_TOKEN="kube-cluster"
 HOST_IP=$1
-HOST_IP2=$2
-HOST_IP3=$3
-HOST_NAME=$4
-ETCD_INITIAL_CLUSTER="$ETCD_NAME=http://$HOST_IP:2380,$ETCD_NAME-2=http://$HOST_IP2:2380,$ETCD_NAME-3=http://$HOST_IP3:2380"
+HOST_ETCD_NAME=$2
+HOST_IP2=$3
+HOST2_ETCD_NAME=$4
+HOST_IP3=$5
+HOST3_ETCD_NAME=$6
+HOST_NAME=$7
+ETCD_INITIAL_CLUSTER="$HOST_ETCD_NAME=http://$HOST_IP:2380,$HOST2_ETCD_NAME=http://$HOST_IP2:2380,$HOST3_ETCD_NAME=http://$HOST_IP3:2380"
 
 #################  MY CONSTANTS (Don't change this unless you know what you're doing) ###########################
 
@@ -42,11 +44,10 @@ construct_etcd-member_env () {
    mkdir -p "/etc/systemd/system/etcd-member.service.d"
    cd "/etc/systemd/system/etcd-member.service.d"	
    cat << EOF > etcd-member-env.env
-ETCD_OPTS = --name=$ETCD_NAME  \
+ETCD_OPTS = --name=$HOST_ETCD_NAME  \
   --listen-peer-urls="http://0.0.0.0:2380"  \
   --listen-client-urls="http://$HOST_IP:2379,http://127.0.0.1:2379"  \
-  --advertise-client-urls="http://$HOST_IP:2379,http://127.0.0.1:2379"  \
-  --initial-advertise-peer-urls="http://$HOST_IP:2380"  \
+  --advertise-client-urls="http://$HOST_IP:2379"  \
   --initial-cluster="$ETCD_INITIAL_CLUSTER"  \
   --initial-cluster-state="new"  \
   --initial-cluster-token=$ETCD_CLUSTER_TOKEN
@@ -86,7 +87,13 @@ begin_execution () {
   done
      
 }
-
+validate_input_parameters () {
+  if [ -z "$1" ]
+  then
+    echo "No argument supplied -$1"
+  fi
+ 
+}
 download_bootstrap_script_and_retry () {
  
    curl -O $BOOTSTRAP_SCRIPT_PATH -L $BOOTSTRAP_URL
@@ -98,6 +105,7 @@ download_bootstrap_script_and_retry () {
 ##########################################################
 
 # check if exists with executable permission -x switch
+validate_input_parameters
 if [ -x "$BOOTSTRAP_SCRIPT_PATH" ];  then
    echo 'About to start execution since found '$BOOTSTRAP_SCRIPT_PATH
    begin_execution

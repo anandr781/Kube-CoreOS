@@ -30,8 +30,10 @@ systemd:
           - name: 20-clct-etcd-member.conf
             contents: |
               [Service]
+              RestartSec=120s
+              Restart=on-failure
               EnvironmentFile=/etc/systemd/system/etcd-member.service.d/etcd-member-env.env
-                       
+              
       - name: flanneld.service
         enable: true
         dropins:
@@ -42,6 +44,8 @@ systemd:
               After=etcd-member.service
               
               [Service]
+              RestartSec=120s
+              Restart=on-failure
               EnvironmentFile=/etc/systemd/system/flanneld.service.d/flanneld-env.env
               ExecStartPre=/usr/bin/etcdctl set /coreos.com/network/config '{ "Network": ${FLANNEL_IP_RANGE} , "Backend": {"Type": "vxlan"} }'
       
