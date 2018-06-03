@@ -46,7 +46,7 @@ systemd:
               [Service]
               RestartSec=30s
               Restart=always
-              ExecStartPre=/usr/bin/etcdctl set /coreos.com/network/config '{ "Network": 10.5.0.0/16 , "Backend": {"Type": "vxlan"} }'
+              ExecStartPre=/usr/bin/etcdctl set /coreos.com/network/config '{ "Network": "10.5.0.0/16" , "Backend": {"Type": "vxlan"} }'
       
       - name: docker.service
         enable: true
