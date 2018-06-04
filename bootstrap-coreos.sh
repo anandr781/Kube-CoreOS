@@ -62,7 +62,7 @@ start_services () {
   systemctl restart etcd-member.service
   systemctl restart flanneld.service
   systemctl restart docker.service
-  systemctl restart docker-tcp.socket 
+
 }
 
 begin_execution () {
