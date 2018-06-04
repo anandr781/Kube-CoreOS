@@ -18,6 +18,10 @@ CoreOS - Cluster member migration:
 CoreOS-AWS Cloud Formation Template :
       https://gist.github.com/kgorskowski/3793ea745a1dd370e17e#file-coreos-ecs-agent-cloudformation-template
 
+Inspect CIDR :
+http://magic-cookie.co.uk/iplist.html
+	  
+	  
 Important Files and Directories :
  systemd unit file location : /usr/lib64/systemd/systemctl
 
