@@ -9,10 +9,10 @@ function fetch_etcendpoints ()  {
  ETCD_CLIENTS="$(echo $sampleStr | sed 's/ /,/g')"
 }
 
-function setup_certs () {
+function setup_controller_certs () {
  
-   chmod +x setup_tls_certs.sh
-  ./setup_tls_certs.sh   
+   chmod +x setup_tls_certs-master.sh
+  ./setup_tls_certs-master.sh 
 }
 
 fetch_etcendpoints $ETCD_CLIENTS
@@ -28,9 +28,6 @@ then
     echo 'aborting script.... :( '
     exit 1
 fi
-
-#Anand : Now fire up all the TLS stuff
-setup_certs
 
 
 # Specify the version (vX.Y.Z) of Kubernetes assets to deploy
@@ -75,6 +72,12 @@ if [ "${USE_CALICO}" = "true" ]; then
 else
     export CALICO_OPTS=""
 fi
+
+#Anand:  Set it to the public IP of the hostname (or hostname) but make sure this node is reachable on 443 from other nodes
+export MASTER_HOSTIP=192.168.1.114
+
+#Anand : Now fire up all the TLS stuff
+setup_controller_certs
 
 # -------------
 
