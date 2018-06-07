@@ -4,7 +4,7 @@ set -e
 ETCD_CLIENTS=''
 function fetch_etcendpoints ()  {
 
- #get the ETC_ENDPOINTS
+ #get the ETC_ENDPOINTS -http://ip:port,...
  sampleStr="$(curl --silent  http://127.0.0.1:2379/v2/members| jq -r '.members[].clientURLs[0]')"
  ETCD_CLIENTS="$(echo $sampleStr | sed 's/ /,/g')"
 }
