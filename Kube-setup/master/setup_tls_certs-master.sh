@@ -6,6 +6,7 @@ openssl genrsa -out CA-Keys/ca-key.pem 2048
 openssl req -x509 -new -nodes -key CA-Keys/ca-key.pem -days 10000 -out CA-Keys/ca.pem -subj "/CN=kube-ca"
 
 cd ..
+
 # Kubernetes API Server Key Pair - https://github.com/coreos/coreos-kubernetes/blob/master/Documentation/openssl.md#kubernetes-api-server-keypair
 mkdir -p API-Server-Keys
 cd API-Server-Keys 
@@ -27,12 +28,11 @@ DNS.4 = kubernetes.default.svc.cluster.local
 DNS.5 = k8s
 DNS.6 = k8s.default
 IP.1 = ${K8S_SERVICE_IP}
-IP.2 = ${MASTER_HOSTIP} 
+IP.2 = ${MASTER_HOST} 
 EOF
 
-# Generate the API server certs - https://github.com/coreos/coreos-kubernetes/blob/master/Documentation/openssl.md#generate-the-api-server-keypair
- openssl genrsa -out apiserver-key.pem 2048
- openssl req -new -key apiserver-key.pem -out apiserver.csr -subj "/CN=kube-apiserver" -config openssl.cnf
- openssl x509 -req -in apiserver.csr -CA ../CA-Keys/ca.pem -CAkey ../CA-Keys/ca-key.pem -CAcreateserial -out apiserver.pem -days 365 -extensions v3_req -extfile openssl.cnf
- 
+openssl genrsa -out apiserver-key.pem 2048
+openssl req -new -key apiserver-key.pem -out apiserver.csr -subj "/CN=kube-apiserver" -config openssl.cnf
+openssl x509 -req -in apiserver.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out apiserver.pem -days 365 -extensions v3_req -extfile openssl.cnf
 
+cd ..
