@@ -21,9 +21,9 @@ fetch_etcendpoints $ETCD_CLIENTS
 # List of etcd servers (http://ip:port), comma separated
 export ETCD_ENDPOINTS=$ETCD_CLIENTS
 
-read -p "Are you sure that CSV list of ETCD_ENDPOINTS is correct -"$ETCD_ENDPOINTS -n 1 -r
+read -p "Should we abort, this is the CSV list of ETCD_ENDPOINTS -"$ETCD_ENDPOINTS -n 1 -r
 echo    # (optional) move to a new line
-if [[ ! $REPLY =~ ^[Yy]$ ]]
+if [[  $REPLY =~ ^[Yy]$ ]]
 then
     echo 'aborting script.... :( '
     exit 1
@@ -39,22 +39,31 @@ export HYPERKUBE_IMAGE_REPO=quay.io/coreos/hyperkube
 # The CIDR network to use for pod IPs.
 # Each pod launched in the cluster will be assigned an IP out of this range.
 # Each node will be configured such that these IPs will be routable using the flannel overlay network.
-export POD_NETWORK=10.5.6.0/24
+read -p "Enter POD_NETWORK CIDR . Please note that each will be configured such that these IPs will be routable using flannel : " pod_cidr
+echo "Entered POD_NETWORK CIDR : "$pod_cidr
+export POD_NETWORK=$pod_cidr
 
 # The CIDR network to use for service cluster IPs.
 # Each service will be assigned a cluster IP out of this range.
 # This must not overlap with any IP ranges assigned to the POD_NETWORK, or other existing network infrastructure.
 # Routing to these IPs is handled by a proxy service local to each node, and are not required to be routable between nodes.
-export SERVICE_IP_RANGE=10.254.0.0/24
+read -p "Enter SERVICE_IP_RANGE CIDR , This must not overlap with any IP ranges assigned to the POD_NETWORK, or other existing network infrastructure. : " service_ip_range_cidr
+echo "Entered SERVICE_IP_RANGE CIDR is : " $service_ip_range_cidr
+export SERVICE_IP_RANGE=$service_ip_range_cidr
+
 
 # The IP address of the Kubernetes API Service
 # If the SERVICE_IP_RANGE is changed above, this must be set to the first IP in that range.
-export K8S_SERVICE_IP=10.254.0.1
+read -p "Enter K8S_SERVICE_IP, this must be set to the first IP in the SERVICE_IP_RANGE : " k8s_service_ipaddr
+echo "Entered K8S_SERVICE_IP is : " $k8s_service_ipaddr
+export K8S_SERVICE_IP=$k8s_service_ipaddr
 
 # The IP address of the cluster DNS service.
 # This IP must be in the range of the SERVICE_IP_RANGE and cannot be the first IP in the range.
 # This same IP must be configured on all worker nodes to enable DNS service discovery.
-export DNS_SERVICE_IP=10.254.0.10
+read -p "Enterd DNS_SERVICE_IP, This IP must be in the range of the SERVICE_IP_RANGE and cannot be the first IP in the range. This same IP must be configured on workers for DNS service discovery : "  dns_service_ipaddr
+echo "Entered DNS_SERVICE_IP is : " $dns_service_ipaddr
+export DNS_SERVICE_IP=$dns_service_ipaddr
 
 # Whether to use Calico for Kubernetes network policy.
 export USE_CALICO=false
@@ -74,7 +83,15 @@ else
 fi
 
 #Anand:  Set it to the public IP of the hostname (or hostname) but make sure this node is reachable on 443 from other nodes
-export MASTER_HOSTIP=192.168.1.114
+read -p "Enter the MAST_HOSTIP this is the IP of the K8s Cluster's master, Set it to the public IP of the hostname (or hostname) but make sure this node is reachable on 443 from other nodes : "master_ipaddr
+echo "Entered MASTER_HOSTIP is : "$master_ipaddr
+export MASTER_HOSTIP=$master_ipaddr
+
+read -p "Enter the Eth device on which ETCD cluster runs : "eth_device
+echo "Entered Eth device : " $eth_device
+export ADVERTISE_IP =$( ifconfig $eth_device | grep "inet " | cut -d"t" -f2 | cut -d " " -f2 )
+echo " Selected ADVERTISE_IP : "$ADVERTISE_IP
+
 
 #Anand : Now fire up all the TLS stuff
 setup_controller_certs
