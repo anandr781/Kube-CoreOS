@@ -84,10 +84,10 @@ fi
 
 #Anand:  Set it to the public IP of the hostname (or hostname) but make sure this node is reachable on 443 from other nodes
 read -p "Enter the MAST_HOSTIP this is the IP of the K8s Cluster's master, Set it to the public IP of the hostname (or hostname) but make sure this node is reachable on 443 from other nodes : "master_ipaddr
-echo "Entered MASTER_HOSTIP is : "$master_ipaddr
+echo "Entered MASTER_HOSTIP is : " $master_ipaddr
 export MASTER_HOSTIP=$master_ipaddr
 
-read -p "Enter the Eth device on which ETCD cluster runs : "eth_device
+read -p "Enter the Eth device on which ETCD cluster runs : " eth_device
 echo "Entered Eth device : " $eth_device
 export ADVERTISE_IP =$( ifconfig $eth_device | grep "inet " | cut -d"t" -f2 | cut -d " " -f2 )
 echo " Selected ADVERTISE_IP : "$ADVERTISE_IP
