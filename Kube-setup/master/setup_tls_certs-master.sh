@@ -5,7 +5,9 @@ mkdir -p CA-Keys
 openssl genrsa -out CA-Keys/ca-key.pem 2048
 openssl req -x509 -new -nodes -key CA-Keys/ca-key.pem -days 10000 -out CA-Keys/ca.pem -subj "/CN=kube-ca"
 
-cd ..
+git add -A
+git commit 
+git push
 
 # Kubernetes API Server Key Pair - https://github.com/coreos/coreos-kubernetes/blob/master/Documentation/openssl.md#kubernetes-api-server-keypair
 mkdir -p API-Server-Keys
