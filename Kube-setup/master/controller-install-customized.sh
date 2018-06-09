@@ -90,7 +90,7 @@ export MASTER_HOSTIP=$master_ipaddr
 read -p "Enter the Eth device on which ETCD cluster runs : " eth_device
 echo "Entered Eth device : " $eth_device
 ipAdd="$( ifconfig $eth_device | grep "inet " | cut -d"t" -f2 | cut -d " " -f2 )"
-export ADVERTISE_IP ="$(echo $ipAdd)"
+export ADVERTISE_IP="$(echo $ipAdd)"
 echo " Selected ADVERTISE_IP : "${ADVERTISE_IP}
 
 
