@@ -8,6 +8,7 @@ openssl req -x509 -new -nodes -key CA-Keys/ca-key.pem -days 10000 -out CA-Keys/c
 mkdir -p /etc/kubernetes/ssl
 cp . /etc/kubernetes/ssl
 
+git pull
 git add -A
 git commit 
 git push
