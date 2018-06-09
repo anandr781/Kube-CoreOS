@@ -106,9 +106,10 @@ function init_config {
         export $(cat $ENV_FILE | xargs)
     fi
 
-    if [ -z $ADVERTISE_IP ]; then
-        export ADVERTISE_IP=$(awk -F= '/COREOS_PUBLIC_IPV4/ {print $2}' /etc/environment)
-    fi
+   # Anand : Commented
+   # if [ -z $ADVERTISE_IP ]; then
+   #    export ADVERTISE_IP=$(awk -F= '/COREOS_PUBLIC_IPV4/ {print $2}' /etc/environment)
+   # fi
 
     for REQ in "${REQUIRED[@]}"; do
         if [ -z "$(eval echo \$$REQ)" ]; then
