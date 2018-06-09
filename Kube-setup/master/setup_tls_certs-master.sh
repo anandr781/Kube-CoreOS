@@ -9,6 +9,8 @@ git add -A
 git commit 
 git push
 
+cd ..
+
 # Kubernetes API Server Key Pair - https://github.com/coreos/coreos-kubernetes/blob/master/Documentation/openssl.md#kubernetes-api-server-keypair
 mkdir -p API-Server-Keys
 cd API-Server-Keys 
