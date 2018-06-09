@@ -5,6 +5,9 @@ mkdir -p CA-Keys
 openssl genrsa -out CA-Keys/ca-key.pem 2048
 openssl req -x509 -new -nodes -key CA-Keys/ca-key.pem -days 10000 -out CA-Keys/ca.pem -subj "/CN=kube-ca"
 
+mkdir -p /etc/kubernetes/ssl
+cp . /etc/kubernetes/ssl
+
 git add -A
 git commit 
 git push
@@ -38,5 +41,6 @@ EOF
 openssl genrsa -out apiserver-key.pem 2048
 openssl req -new -key apiserver-key.pem -out apiserver.csr -subj "/CN=kube-apiserver" -config openssl.cnf
 openssl x509 -req -in apiserver.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out apiserver.pem -days 365 -extensions v3_req -extfile openssl.cnf
+cp . /etc/kubernetes/ssl
 
 cd ..
