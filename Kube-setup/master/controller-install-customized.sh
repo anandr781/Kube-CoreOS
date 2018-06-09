@@ -83,7 +83,7 @@ else
 fi
 
 #Anand:  Set it to the public IP of the hostname (or hostname) but make sure this node is reachable on 443 from other nodes
-read -p "Enter the MAST_HOSTIP this is the IP of the K8s Cluster's master, Set it to the public IP of the hostname (or hostname) but make sure this node is reachable on 443 from other nodes : "master_ipaddr
+read -p "Enter the MAST_HOSTIP this is the IP of the K8s Cluster's master, Set it to the public IP of the hostname (or hostname) but make sure this node is reachable on 443 from other nodes : " master_ipaddr
 echo "Entered MASTER_HOSTIP is : " $master_ipaddr
 export MASTER_HOSTIP=$master_ipaddr
 
