@@ -20,7 +20,7 @@ basicConstraints = CA:FALSE
 keyUsage = nonRepudiation, digitalSignature, keyEncipherment
 subjectAltName = @alt_names
 [alt_names]
-IP.1 = $ENV::WORKER_LOCALHOST_IP
+IP.1 = ${WORKER_LOCALHOST_IP}
 EOF
 
 openssl genrsa -out ${WORKER_LOCALHOST_NAME}-worker-key.pem 2048
