@@ -1,4 +1,5 @@
-export WORKER_LOCALHOST_IP=$(ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')
+ipAdd="$( ifconfig $eth_device | grep "inet " | cut -d"t" -f2 | cut -d " " -f2 )"
+export WORKER_LOCALHOST_IP ="$(echo $ipAdd)"
 export WORKER_LOCALHOST_NAME=$(hostname)
 
 
@@ -21,5 +22,5 @@ EOF
 
 openssl genrsa -out ${WORKER_LOCALHOST_NAME}-worker-key.pem 2048
 WORKER_IP=${WORKER_LOCALHOST_IP} openssl req -new -key ${WORKER_LOCALHOST_NAME}-worker-key.pem -out ${WORKER_LOCALHOST_NAME}-worker.csr -subj "/CN=${WORKER_LOCALHOST_NAME}" -config worker-openssl.cnf
-WORKER_IP=${WORKER_LOCALHOST_IP} openssl x509 -req -in ${WORKER_LOCALHOST_NAME}-worker.csr -CA ../CA-Keys/ca.pem -CAkey ../CA-Keys/ca-key.pem -CAcreateserial -out ${WORKER_LOCALHOST_NAME}-worker.pem -days 365 -extensions v3_req -extfile worker-openssl.cnf
+WORKER_IP=${WORKER_LOCALHOST_IP} openssl x509 -req -in ${WORKER_LOCALHOST_NAME}-worker.csr -CA ../master/CA-Keys/ca.pem -CAkey ../master/CA-Keys/ca-key.pem -CAcreateserial -out ${WORKER_LOCALHOST_NAME}-worker.pem -days 365 -extensions v3_req -extfile worker-openssl.cnf
 
