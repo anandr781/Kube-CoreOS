@@ -9,14 +9,18 @@ openssl req -x509 -new -nodes -key CA-Keys/ca-key.pem -days 10000 -out CA-Keys/c
 cd CA-Keys
 mkdir -p /etc/kubernetes/ssl
 cp * /etc/kubernetes/ssl
+cd ..
 
+read -p "Enter git account email address to commit the CA-Keys momentarily : " git_email_addr
+echo "Entered git account email : " $git_email_addr
+git config user.email $git_email_addr
 git pull
-git add -A
+git add -A CA-Keys
 git commit -m "commiting CA-Keys momentarily"
-git push
+git push -v  #spit all the crap  
 echo "-------> git push done for ca-certs"
 
-cd ..
+
 
 
 
