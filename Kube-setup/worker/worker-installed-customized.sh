@@ -9,7 +9,7 @@ function fetch_etcendpoints ()  {
  ETCD_CLIENTS="$(echo $sampleStr | sed 's/ /,/g')"
 }
 
-function setup_controller_certs () {
+function setup_worker_certs () {
  
    chmod +x setup_tls_certs-worker.sh
   ./setup_tls_certs-worker.sh 
@@ -77,6 +77,10 @@ echo "Entered Eth device : " $eth_device
 ipAdd="$( ifconfig $eth_device | grep "inet " | cut -d"t" -f2 | cut -d " " -f2 )"
 export ADVERTISE_IP="$(echo $ipAdd)"
 echo " Selected ADVERTISE_IP : "${ADVERTISE_IP}
+
+#Anand : Now fire up all the TLS stuff
+setup_worker_certs
+
 
 # -------------
 
