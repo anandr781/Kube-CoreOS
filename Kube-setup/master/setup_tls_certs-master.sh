@@ -1,6 +1,16 @@
 #! /bin/bash
 
 # Create a Cluster Root CA - https://github.com/coreos/coreos-kubernetes/blob/master/Documentation/openssl.md#create-a-cluster-root-ca
+read -p "Enter git account email address to commit the CA-Keys momentarily : " git_email_addr
+echo "Entered git account email : " $git_email_addr
+git config user.email $git_email_addr
+
+rm -rf CA-Keys
+git add -A
+git commit -m "removed old one"
+git push -v 
+
+
 mkdir -p CA-Keys
 openssl genrsa -out CA-Keys/ca-key.pem 2048
 openssl req -x509 -new -nodes -key CA-Keys/ca-key.pem -days 10000 -out CA-Keys/ca.pem -subj "/CN=kube-ca"
@@ -11,10 +21,7 @@ mkdir -p /etc/kubernetes/ssl
 cp * /etc/kubernetes/ssl
 cd ..
 
-read -p "Enter git account email address to commit the CA-Keys momentarily : " git_email_addr
-echo "Entered git account email : " $git_email_addr
-git config user.email $git_email_addr
-git pull
+
 git add -A CA-Keys
 git commit -m "commiting CA-Keys momentarily"
 git push -v  #spit all the crap  
