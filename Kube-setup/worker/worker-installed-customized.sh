@@ -72,6 +72,8 @@ else
     export CALICO_OPTS=""
 fi
 
+export WORKER_LOCALHOST_NAME=$(hostname)
+
 read -p "Enter the Eth device on which ETCD cluster runs : " eth_device
 echo "Entered Eth device : " $eth_device
 ipAdd="$( ifconfig $eth_device | grep "inet " | cut -d"t" -f2 | cut -d " " -f2 )"
@@ -143,8 +145,8 @@ ExecStart=/usr/lib/coreos/kubelet-wrapper \
   --cluster_dns=${DNS_SERVICE_IP} \
   --cluster_domain=cluster.local \
   --kubeconfig=/etc/kubernetes/worker-kubeconfig.yaml \
-  --tls-cert-file=/etc/kubernetes/ssl/worker.pem \
-  --tls-private-key-file=/etc/kubernetes/ssl/worker-key.pem
+  --tls-cert-file=/etc/kubernetes/ssl/${WORKER_LOCALHOST_NAME}-worker.pem \
+  --tls-private-key-file=/etc/kubernetes/ssl/${WORKER_LOCALHOST_NAME}-worker-key.pem
 ExecStop=-/usr/bin/rkt stop --uuid-file=${uuid_file}
 Restart=always
 RestartSec=10
@@ -226,8 +228,8 @@ clusters:
 users:
 - name: kubelet
   user:
-    client-certificate: /etc/kubernetes/ssl/worker.pem
-    client-key: /etc/kubernetes/ssl/worker-key.pem
+    client-certificate: /etc/kubernetes/ssl/${WORKER_LOCALHOST_NAME}-worker.pem
+    client-key: /etc/kubernetes/ssl/${WORKER_LOCALHOST_NAME}-worker-key.pem
 contexts:
 - context:
     cluster: local
