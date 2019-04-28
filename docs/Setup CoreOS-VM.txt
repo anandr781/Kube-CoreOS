@@ -2,7 +2,7 @@ PART-I. Set CoreOS Baremetal
 =========================
 
 Additional Documentation : https://coreos.com/os/docs/latest/booting-on-virtualbox.html
-https://coreos.com/os/docs/latest/cloud-config.html
+https://coreos.com/os/docs/latest/clc-examples.html
 https://www.digitalocean.com/community/tutorials/how-to-use-cloud-config-for-your-initial-server-setup
 https://coreos.com/os/docs/latest/quickstart.html
 
@@ -22,3 +22,5 @@ https://coreos.com/os/docs/latest/quickstart.html
 
  
 PART-II. 
+
+To install using "ignition-config" : sudo coreos-install -d /dev/sda -i ignitionFile -C stable
